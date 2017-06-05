@@ -121,6 +121,25 @@ public class PlayUI : MonoBehaviour
         return go;
     }
 
+    private void SetColor(Transform playerSelect, int playerNumber)
+    {
+        Player player = RootController.Instance.GetPlayer(playerNumber);
+        if (player)
+        {
+            SpecialPowerUI special1 = playerSelect.Find("Color1").GetComponent<SpecialPowerUI>();
+            special1.SetColorType(player.type1.Type);
+
+            SpecialPowerUI special2 = playerSelect.Find("Color2").GetComponent<SpecialPowerUI>();
+            special2.SetColorType(player.type2.Type);
+
+            SpecialPowerUI special3 = playerSelect.Find("Color3").GetComponent<SpecialPowerUI>();
+            special3.SetColorType(player.type3.Type);
+
+            SpecialPowerUI special4 = playerSelect.Find("Color4").GetComponent<SpecialPowerUI>();
+            special4.SetColorType(player.type4.Type);
+        }
+    }
+
     private void OnEnable()
     {
         Lean.Touch.LeanTouch.OnFingerDown += OnFingerDown;
@@ -131,28 +150,6 @@ public class PlayUI : MonoBehaviour
     {
         Lean.Touch.LeanTouch.OnFingerDown -= OnFingerDown;
         Lean.Touch.LeanTouch.OnFingerUp -= OnFingerUp;
-    }
-
-    private void SetColor(Transform playerSelect, int playerNumber)
-    {
-        Player player = RootController.Instance.GetPlayer(playerNumber);
-        if (player)
-        {
-            Image color1 = playerSelect.Find("Color1").GetComponent<Image>();
-            color1.sprite = player.type1.Sprite;
-            SpecialPowerUI special1 = playerSelect.Find("Color1").GetComponent<SpecialPowerUI>();
-            special1.SetColorType(player.type1.Type);
-
-            Image color2 = playerSelect.Find("Color2").GetComponent<Image>();
-            color2.sprite = player.type2.Sprite;
-            SpecialPowerUI special2 = playerSelect.Find("Color2").GetComponent<SpecialPowerUI>();
-            special2.SetColorType(player.type2.Type);
-        }
-    }
-
-    void OnPinch()
-    {
-
     }
 
     void OnFingerDown(Lean.Touch.LeanFinger finger)

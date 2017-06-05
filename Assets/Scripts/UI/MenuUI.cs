@@ -41,7 +41,6 @@ public class MenuUI : MonoBehaviour
             colors.Add(colorSelect.Find("ColorRed"));
 
             Transform selected1 = null;
-            Transform selected2 = null;
             for (int i = 0; i < colors.Count; i++)
             {
                 Transform colorImage = colors[i];
@@ -49,32 +48,16 @@ public class MenuUI : MonoBehaviour
                 {
                     selected1 = colorImage.Find("Selected1");
                 }
-                if (colorImage.Find("Selected2"))
-                {
-                    selected2 = colorImage.Find("Selected2");
-                }
             }
     
             for (int i = 0; i < colors.Count; i++)
             {
                 Transform colorImage = colors[i];
 
-                if (player.type1.Type == TileTypes.ESubState.yellow + i)
+                if (player.selectedType.Type == TileTypes.ESubState.yellow + i)
                 {
-                    //colorImage.sprite = Resources.Load<Sprite>("Images/selected");
-                    //colorImage.type = Image.Type.Sliced;
                     selected1.SetParent(colorImage, false);
                 }
-                if ( player.type2.Type == TileTypes.ESubState.yellow + i)
-                {
-                    //colorImage.sprite = Resources.Load<Sprite>("Images/selected");
-                    //colorImage.type = Image.Type.Sliced;
-                    selected2.SetParent(colorImage, false);
-                }
-                /*else
-                {
-                    //colorImage.sprite = null;
-                }*/
 
             }
         }

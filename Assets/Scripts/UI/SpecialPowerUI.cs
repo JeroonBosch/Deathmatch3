@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpecialPowerUI : MonoBehaviour {
 
@@ -24,6 +25,8 @@ public class SpecialPowerUI : MonoBehaviour {
     private void Awake()
     {
         _type = new TileTypes();
+
+        GetComponent<Image>().sprite = _type.Sprite ;
     }
 
     void Update()
@@ -65,6 +68,7 @@ public class SpecialPowerUI : MonoBehaviour {
     public void SetColorType (TileTypes.ESubState state)
     {
         _type.Type = state;
+        GetComponent<Image>().sprite = _type.Sprite;
     }
 
     public void Fly (Player curPlayer)
