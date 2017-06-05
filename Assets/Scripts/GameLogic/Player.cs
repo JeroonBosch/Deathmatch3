@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Player : ScriptableObject
 {
@@ -32,12 +33,16 @@ public class Player : ScriptableObject
     public TileTypes type4 { get { return _type4; } }
     private float type4Power;
 
+    private List<Transform> colors;
 
     private int _turn;
     public int turn { get { return _turn; } set { _turn = value; } }
 
     private bool isExploding = false;
     public bool exploding { set { isExploding = value; } }
+
+    public bool extraTurn = false;
+    private GameObject extraTurnEffect = null;
 
     public void Init(string name, int number)
     {
@@ -52,15 +57,18 @@ public class Player : ScriptableObject
         _type2 = new TileTypes();
         _type3 = new TileTypes();
         _type4 = new TileTypes();
-        _type1.Type = TileTypes.ESubState.yellow;
-        _type2.Type = TileTypes.ESubState.blue;
-        _type3.Type = TileTypes.ESubState.green;
-        _type4.Type = TileTypes.ESubState.red;
+        
+        _type1.Type = TileTypes.ESubState.blue;
+        _type2.Type = TileTypes.ESubState.green;
+        _type3.Type = TileTypes.ESubState.red;
+        _type4.Type = TileTypes.ESubState.yellow;
         turn = 0;
         type1Power = 0;
         type2Power = 0;
         type3Power = 0;
         type4Power = 0;
+
+        colors = new List<Transform>();
     }
 
     public void ReceiveDamage(int damage)
@@ -85,10 +93,8 @@ public class Player : ScriptableObject
 
     public void SelectColorByIndex(int index)
     {
-        if ((TileTypes.ESubState.yellow + index) != _type1.Type)
+        if ((TileTypes.ESubState.yellow + index) != _selectedType.Type)
         {
-            //_type1.Type = _type2.Type;
-            //_type2.Type = TileTypes.ESubState.yellow + index;
             _selectedType.Type = TileTypes.ESubState.yellow + index;
         }
     }
@@ -101,10 +107,16 @@ public class Player : ScriptableObject
             this.portrait = transform.Find("PortraitHP").GetComponent<PortraitUI>();
         }
 
-        transform.Find("Color1").Find("Power").GetComponent<Text>().text = type1Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color2").Find("Power").GetComponent<Text>().text = type2Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color3").Find("Power").GetComponent<Text>().text = type3Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color4").Find("Power").GetComponent<Text>().text = type4Power + "/" + Constants.SpecialMoveFillRequirement;
+
+        transform.Find("Color1").GetComponent<SpecialPowerUI>().UpdateText(type1Power);
+        transform.Find("Color2").GetComponent<SpecialPowerUI>().UpdateText(type2Power);
+        transform.Find("Color3").GetComponent<SpecialPowerUI>().UpdateText(type3Power);
+        transform.Find("Color4").GetComponent<SpecialPowerUI>().UpdateText(type4Power);
+
+        colors.Add(transform.Find("Color1"));
+        colors.Add(transform.Find("Color2"));
+        colors.Add(transform.Find("Color3"));
+        colors.Add(transform.Find("Color4"));
     }
 
     public void SetTimerActive (bool active)
@@ -121,9 +133,9 @@ public class Player : ScriptableObject
             if (CheckPowerLevel_2())
                 transform.Find("Color2").GetComponent<SpecialPowerUI>().SetReady();
             if (CheckPowerLevel_3())
-                transform.Find("Color1").GetComponent<SpecialPowerUI>().SetReady();
+                transform.Find("Color3").GetComponent<SpecialPowerUI>().SetReady();
             if (CheckPowerLevel_4())
-                transform.Find("Color2").GetComponent<SpecialPowerUI>().SetReady();
+                transform.Find("Color4").GetComponent<SpecialPowerUI>().SetReady();
         }
         else
         {
@@ -144,32 +156,34 @@ public class Player : ScriptableObject
 
     public void FillPower (TileTypes.ESubState type, int comboSize)
     {
+        Settings settings = RootController.Instance.GetSettings();
+
         float multiplier = 1f;
         if (selectedType.Type == type)
-            multiplier = Constants.SpecialMoveMultiplier;
+            multiplier = RootController.Instance.GetSettings().SpecialityMultiplier; //multiplier = Constants.SpecialMoveMultiplier;
 
         if (type1.Type == type)
         {
             type1Power += (comboSize * multiplier);
-            type1Power = Mathf.Min(Constants.SpecialMoveFillRequirement, type1Power);
+            type1Power = Mathf.Min(settings.GetFillRequirementByType(type1.Type), type1Power);
         } else if (type2.Type == type)
         {
             type2Power += (comboSize * multiplier);
-            type2Power = Mathf.Min(Constants.SpecialMoveFillRequirement, type2Power);
+            type2Power = Mathf.Min(settings.GetFillRequirementByType(type2.Type), type2Power);
         } else if (type3.Type == type)
         {
             type3Power += (comboSize * multiplier);
-            type3Power = Mathf.Min(Constants.SpecialMoveFillRequirement, type3Power);
+            type3Power = Mathf.Min(settings.GetFillRequirementByType(type3.Type), type3Power);
         } else if (type4.Type == type)
         {
             type4Power += (comboSize * multiplier);
-            type4Power = Mathf.Min(Constants.SpecialMoveFillRequirement, type4Power);
+            type4Power = Mathf.Min(settings.GetFillRequirementByType(type4.Type), type4Power);
         }
 
-        transform.Find("Color1").Find("Power").GetComponent<Text>().text = type1Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color2").Find("Power").GetComponent<Text>().text = type2Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color3").Find("Power").GetComponent<Text>().text = type3Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color4").Find("Power").GetComponent<Text>().text = type4Power + "/" + Constants.SpecialMoveFillRequirement;
+        transform.Find("Color1").GetComponent<SpecialPowerUI>().UpdateText(type1Power);
+        transform.Find("Color2").GetComponent<SpecialPowerUI>().UpdateText(type2Power);
+        transform.Find("Color3").GetComponent<SpecialPowerUI>().UpdateText(type3Power);
+        transform.Find("Color4").GetComponent<SpecialPowerUI>().UpdateText(type4Power);
 
         if (CheckPowerLevel_1())
             transform.Find("Color1").GetComponent<SpecialPowerUI>().SetReady();
@@ -192,10 +206,10 @@ public class Player : ScriptableObject
         if (type4.Type == type)
             type4Power = 0;
 
-        transform.Find("Color1").Find("Power").GetComponent<Text>().text = type1Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color2").Find("Power").GetComponent<Text>().text = type2Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color3").Find("Power").GetComponent<Text>().text = type3Power + "/" + Constants.SpecialMoveFillRequirement;
-        transform.Find("Color4").Find("Power").GetComponent<Text>().text = type4Power + "/" + Constants.SpecialMoveFillRequirement;
+        transform.Find("Color1").GetComponent<SpecialPowerUI>().UpdateText(type1Power);
+        transform.Find("Color2").GetComponent<SpecialPowerUI>().UpdateText(type2Power);
+        transform.Find("Color3").GetComponent<SpecialPowerUI>().UpdateText(type3Power);
+        transform.Find("Color4").GetComponent<SpecialPowerUI>().UpdateText(type4Power);
 
         transform.Find("Color1").GetComponent<SpecialPowerUI>().SetNotReady();
         transform.Find("Color2").GetComponent<SpecialPowerUI>().SetNotReady();
@@ -205,7 +219,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_1 ()
     {
-        if (type1Power >= Constants.SpecialMoveFillRequirement)
+        if (type1Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type1.Type))
             return true;
 
         return false;
@@ -213,7 +227,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_2()
     {
-        if (type2Power >= Constants.SpecialMoveFillRequirement)
+        if (type2Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type2.Type))
             return true;
 
         return false;
@@ -221,7 +235,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_3()
     {
-        if (type3Power >= Constants.SpecialMoveFillRequirement)
+        if (type3Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type3.Type))
             return true;
 
         return false;
@@ -229,7 +243,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_4()
     {
-        if (type4Power >= Constants.SpecialMoveFillRequirement)
+        if (type4Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type4.Type))
             return true;
 
         return false;
@@ -245,11 +259,11 @@ public class Player : ScriptableObject
         return _portraitSprite;
     }
 
-    public void SpecialExplosion()
+    public void SpecialExplosion(string resourcePath)
     {
         if (transform)
         {
-            GameObject explosion = Instantiate(Resources.Load<GameObject>("SpecialExplosion"));
+            GameObject explosion = Instantiate(Resources.Load<GameObject>(resourcePath));
             explosion.transform.SetParent(transform.parent);
             explosion.transform.position = transform.position;
 
@@ -269,5 +283,51 @@ public class Player : ScriptableObject
 
             Destroy(explosion, .94f);
         }
+    }
+
+    public void BlueTileEffect()
+    {
+        if (transform)
+        {
+            extraTurnEffect = Instantiate(Resources.Load<GameObject>("BlueTileEffect"));
+            extraTurnEffect.transform.SetParent(transform.parent);
+            extraTurnEffect.transform.position = transform.position;
+
+            extraTurn = true;
+        }
+    }
+
+    public void EndBlueTileEffect ()
+    {
+        extraTurn = false;
+        if (extraTurnEffect)
+            Destroy(extraTurnEffect);
+    }
+
+    public void GreenTileEffect()
+    {
+        if (transform)
+        {
+            GameObject explosion = Instantiate(Resources.Load<GameObject>("GreenTileEffect"));
+            explosion.transform.SetParent(transform.parent);
+            explosion.transform.position = transform.position;
+
+            Destroy(explosion, 1f);
+
+            Heal((int)RootController.Instance.GetSettings().GreenFillRequirement);
+        }
+    }
+
+
+    public Transform GetPowerObjectByType (TileTypes.ESubState type)
+    {
+        Transform returnTransform = null;
+
+        foreach (Transform color in colors)
+        {
+            if (color.GetComponent<SpecialPowerUI>().Type == type)
+                return color;
+        }
+        return returnTransform;
     }
 }

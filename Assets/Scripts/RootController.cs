@@ -10,6 +10,7 @@ public class RootController : MonoBehaviour {
     private StateBase _stateController;
     private List<Player> players;
     private Player _winnerPlayer;
+    private Settings _settings;
 
     public static RootController Instance
     {
@@ -34,6 +35,8 @@ public class RootController : MonoBehaviour {
         _audio = GameObject.Find("Audio").GetComponent<AudioSource>();
         players = new List<Player>();
         _winnerPlayer = null;
+        _settings = ScriptableObject.CreateInstance<Settings>();
+        _settings.DefaultSettings();
     }
 
     public StateBase StateController()
@@ -81,6 +84,11 @@ public class RootController : MonoBehaviour {
         Player player2 = ScriptableObject.CreateInstance<Player>();
         player2.Init("Player2", 1);
         players.Add(player2);
+    }
+
+    public Settings GetSettings()
+    {
+        return _settings;
     }
 
     public Player GetPlayer(int number)

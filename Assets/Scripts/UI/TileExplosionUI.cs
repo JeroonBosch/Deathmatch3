@@ -5,19 +5,19 @@ public class TileExplosionUI : MonoBehaviour
 {
     private RectTransform _rt;
     private Vector2 _startPosition;
-    private Player _target;
+    private Transform _target;
 
     private float _travelTime = .66f;
     private float _travellingFor = 0f;
     private float _random;
 
-    private bool _damageApplied = false;
+    //private bool _damageApplied = false;
 
-    public void Init(Player target)
+    public void Init(Transform target)
     {
         _target = target;
         _rt = GetComponent<RectTransform>();
-        _startPosition = _rt.localPosition;
+        _startPosition = _rt.position;
         _random = Random.Range(-1f, 1f);
 
         RootController.Instance.DisableControls();
@@ -29,8 +29,8 @@ public class TileExplosionUI : MonoBehaviour
     private void OnDestroy()
     {
         RootController.Instance.EnableControls();
-        if (!_damageApplied)
-            ApplyDamage();
+        //if (!_damageApplied)
+            //ApplyDamage();
     }
 
     // Update is called once per frame
@@ -38,7 +38,7 @@ public class TileExplosionUI : MonoBehaviour
     {
         if (_target != null)
         {
-            Vector2 endPosition = _target.transform.GetComponent<RectTransform>().localPosition; 
+            Vector2 endPosition = _target.GetComponent<RectTransform>().position;
 
             _travellingFor += Time.deltaTime; //time in seconds
             float t = _travellingFor / _travelTime;
@@ -49,7 +49,7 @@ public class TileExplosionUI : MonoBehaviour
             Vector2 p2 = new Vector2(endPosition.x + 400 * _random, endPosition.y);
             //Vector2 p2 = endPosition;
             Vector3 p3 = endPosition;
-            _rt.localPosition = CalculateBezierPoint(t, p0, p1, p2, p3);
+            _rt.position = CalculateBezierPoint(t, p0, p1, p2, p3);
         }
     }
 
@@ -70,10 +70,10 @@ public class TileExplosionUI : MonoBehaviour
         return p;
     }
 
-    private void ApplyDamage()
+    /*private void ApplyDamage()
     {
         _damageApplied = true;
         _target.NormalExplosion();
         _target.ReceiveDamage(1);
-    }
+    }*/
 }

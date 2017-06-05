@@ -6,18 +6,28 @@ public class MissileUI : MonoBehaviour
     private Player _target;
     public Player target { set { _target = value;  } }
 
+    private TileTypes _type;
+    public TileTypes.ESubState Type { set { _type.Type = value; } get { return _type.Type;  } }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == _target.playerString)
         {
-            _target.ReceiveDamage(Mathf.RoundToInt(Constants.SpecialMoveFillRequirement));
-            _target.SpecialExplosion();
+            if (_type.Type == TileTypes.ESubState.yellow) { 
+                _target.ReceiveDamage((int)RootController.Instance.GetSettings().YellowFillRequirement);
+                _target.SpecialExplosion("YellowTileExplosion");
+            } else if (_type.Type == TileTypes.ESubState.red) { 
+                _target.ReceiveDamage((int)RootController.Instance.GetSettings().RedFillRequirement);
+                _target.SpecialExplosion("RedTileExplosion"); 
+            }
+
             Destroy(gameObject);
         }
     }
 
     private void Awake()
     {
+        _type = new TileTypes();
         Destroy(gameObject, 3f);
     }
 

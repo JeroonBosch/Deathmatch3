@@ -127,16 +127,16 @@ public class PlayUI : MonoBehaviour
         if (player)
         {
             SpecialPowerUI special1 = playerSelect.Find("Color1").GetComponent<SpecialPowerUI>();
-            special1.SetColorType(player.type1.Type);
+            special1.SetColorType(player.type1.Type, player);
 
             SpecialPowerUI special2 = playerSelect.Find("Color2").GetComponent<SpecialPowerUI>();
-            special2.SetColorType(player.type2.Type);
+            special2.SetColorType(player.type2.Type, player);
 
             SpecialPowerUI special3 = playerSelect.Find("Color3").GetComponent<SpecialPowerUI>();
-            special3.SetColorType(player.type3.Type);
+            special3.SetColorType(player.type3.Type, player);
 
             SpecialPowerUI special4 = playerSelect.Find("Color4").GetComponent<SpecialPowerUI>();
-            special4.SetColorType(player.type4.Type);
+            special4.SetColorType(player.type4.Type, player);
         }
     }
 
@@ -169,7 +169,7 @@ public class PlayUI : MonoBehaviour
                 _selectedUI = results[0].gameObject;
                 foreach (RaycastResult result in results)
                 {
-                    if (result.gameObject.name == "Color1" || result.gameObject.name == "Color2")
+                    if (result.gameObject.name.Contains("Color"))
                         _selectedUI = result.gameObject;
                 }
 
@@ -180,9 +180,11 @@ public class PlayUI : MonoBehaviour
                 }
                 if (_selectedUI.transform.parent == _curPlayer.transform)
                 {
-                    if (_selectedUI.name == "Color1" && _curPlayer.CheckPowerLevel_1() || _selectedUI.name == "Color2" && _curPlayer.CheckPowerLevel_2())
+                    if (_selectedUI.name == "Color1" && _curPlayer.CheckPowerLevel_1() || _selectedUI.name == "Color2" && _curPlayer.CheckPowerLevel_2() || _selectedUI.name == "Color3" && _curPlayer.CheckPowerLevel_3() || _selectedUI.name == "Color4" && _curPlayer.CheckPowerLevel_4())
                     {
                         _selectedUI.GetComponent<SpecialPowerUI>().SetActive(finger, _curPlayer);
+                        if (_selectedUI.name != "Color1") //not blue
+                            EndTurn();
                     }
                 }
             }
@@ -208,9 +210,10 @@ public class PlayUI : MonoBehaviour
 
                 if (_selectedUI2.transform.parent == _curPlayer.transform)
                 {
-                    if (_selectedUI2.name == "Color1" && _curPlayer.CheckPowerLevel_1() || _selectedUI2.name == "Color2" && _curPlayer.CheckPowerLevel_2())
+                    if (_selectedUI2.name == "Color1" && _curPlayer.CheckPowerLevel_1() || _selectedUI2.name == "Color2" && _curPlayer.CheckPowerLevel_2() || _selectedUI.name == "Color3" && _curPlayer.CheckPowerLevel_3() || _selectedUI.name == "Color4" && _curPlayer.CheckPowerLevel_4())
                     {
                         _selectedUI2.GetComponent<SpecialPowerUI>().SetActive(finger, _curPlayer);
+                        EndTurn();
                     }
                 }
             }
@@ -234,10 +237,9 @@ public class PlayUI : MonoBehaviour
 
             if (_selectedUI != null)
             {
-                if (_selectedUI.name == "Color1" && _curPlayer.CheckPowerLevel_1() || _selectedUI.name == "Color2" && _curPlayer.CheckPowerLevel_2())
+                if (_selectedUI.name.Contains("Color"))
                 {
-                    _selectedUI.GetComponent<SpecialPowerUI>().Fly(_curPlayer);
-                    EndTurn();
+                    _selectedUI.GetComponent<SpecialPowerUI>().Fly();
                 }
 
                 _selectedUI = null;
@@ -247,8 +249,7 @@ public class PlayUI : MonoBehaviour
         {
             if (_selectedUI2 != null)
             {
-                _selectedUI2.GetComponent<SpecialPowerUI>().Fly(_curPlayer);
-
+                _selectedUI2.GetComponent<SpecialPowerUI>().Fly();
                 _selectedUI2 = null;
             }
         }
@@ -284,14 +285,19 @@ public class PlayUI : MonoBehaviour
         EndTurn();
     }
 
-    void EndTurn ()
+    private void EndTurn ()
     {
-        Player nextPlayer = RootController.Instance.NextPlayer(_curPlayer.playerNumber);
+        if (_curPlayer.extraTurn)
+        {
+            _curPlayer.EndBlueTileEffect();
+        } else { 
+            Player nextPlayer = RootController.Instance.NextPlayer(_curPlayer.playerNumber);
 
-        _timer = 0;
-        _curPlayer.SetTimerActive(false);
+            _timer = 0;
+            _curPlayer.SetTimerActive(false);
 
-        _curPlayer = nextPlayer;
-        nextPlayer.SetTimerActive(true);
+            _curPlayer = nextPlayer;
+            nextPlayer.SetTimerActive(true);
+        }
     }
 }

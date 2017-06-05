@@ -79,4 +79,29 @@ public class MenuUI : MonoBehaviour
         Player player = RootController.Instance.GetPlayer(playerNumber);
         player.SelectColorByIndex(index);
     }
+
+    public void ChangeBlueReqValue (string newValue)
+    {
+        RootController.Instance.GetSettings().BlueFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeGreenReqValue(string newValue)
+    {
+        RootController.Instance.GetSettings().GreenFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeRedReqValue(string newValue)
+    {
+        RootController.Instance.GetSettings().RedFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeYellowReqValue(string newValue)
+    {
+        RootController.Instance.GetSettings().YellowFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeSpecialityMultiplier(string newValue)
+    {
+        RootController.Instance.GetSettings().SpecialityMultiplier = float.Parse(newValue);
+    }
 }

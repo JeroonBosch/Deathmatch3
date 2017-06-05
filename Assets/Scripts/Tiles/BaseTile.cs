@@ -60,7 +60,7 @@ public class BaseTile : MonoBehaviour {
             if (_destroyCounter > _explosionTime && !_hasExploded)
             {
                 if (_destroyedBy != null)
-                    Explosion(RootController.Instance.NextPlayer(_destroyedBy.playerNumber));
+                    Explosion(_destroyedBy);
             }
 
             if (_destroyCounter > _destroyTime)
@@ -91,7 +91,7 @@ public class BaseTile : MonoBehaviour {
         removeFromList.Remove(this);
     }
 
-    private void Explosion(Player playerToAttack)
+    private void Explosion(Player player)
     {
         if (transform)
         {
@@ -102,7 +102,9 @@ public class BaseTile : MonoBehaviour {
             GameObject explosion = Instantiate(Resources.Load<GameObject>("TileExplosion"));
             explosion.transform.SetParent(transform.parent.parent.parent);
             explosion.transform.position = transform.position;
-            explosion.GetComponent<TileExplosionUI>().Init(playerToAttack);
+
+            Transform powerObject = _destroyedBy.GetPowerObjectByType(_type.Type);
+            explosion.GetComponent<TileExplosionUI>().Init(powerObject);
         }
     }
 }
