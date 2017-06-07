@@ -10,6 +10,8 @@ public class Player : ScriptableObject
     private float _health;
     public float health { get { return _health; } set { _health = value;} }
 
+    public Settings settings;
+
     public Transform transform;
     private PortraitUI portrait;
     private Sprite _portraitSprite;
@@ -156,11 +158,9 @@ public class Player : ScriptableObject
 
     public void FillPower (TileTypes.ESubState type, int comboSize)
     {
-        Settings settings = RootController.Instance.GetSettings();
-
         float multiplier = 1f;
         if (selectedType.Type == type)
-            multiplier = RootController.Instance.GetSettings().SpecialityMultiplier; //multiplier = Constants.SpecialMoveMultiplier;
+            multiplier = settings.SpecialityMultiplier; //multiplier = Constants.SpecialMoveMultiplier;
 
         if (type1.Type == type)
         {
@@ -219,7 +219,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_1 ()
     {
-        if (type1Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type1.Type))
+        if (type1Power >= settings.GetFillRequirementByType(type1.Type))
             return true;
 
         return false;
@@ -227,7 +227,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_2()
     {
-        if (type2Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type2.Type))
+        if (type2Power >= settings.GetFillRequirementByType(type2.Type))
             return true;
 
         return false;
@@ -235,7 +235,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_3()
     {
-        if (type3Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type3.Type))
+        if (type3Power >= settings.GetFillRequirementByType(type3.Type))
             return true;
 
         return false;
@@ -243,7 +243,7 @@ public class Player : ScriptableObject
 
     public bool CheckPowerLevel_4()
     {
-        if (type4Power >= RootController.Instance.GetSettings().GetFillRequirementByType(type4.Type))
+        if (type4Power >= settings.GetFillRequirementByType(type4.Type))
             return true;
 
         return false;
@@ -314,7 +314,7 @@ public class Player : ScriptableObject
 
             Destroy(explosion, 1f);
 
-            Heal((int)RootController.Instance.GetSettings().GreenFillRequirement);
+            Heal((int)settings.GreenFillRequirement);
         }
     }
 

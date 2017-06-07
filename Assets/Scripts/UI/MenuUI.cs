@@ -83,44 +83,95 @@ public class MenuUI : MonoBehaviour
 //Requirements
     public void ChangeBlueReqValue (string newValue)
     {
-        RootController.Instance.GetSettings().BlueFillRequirement = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.BlueFillRequirement = float.Parse(newValue);
     }
 
     public void ChangeGreenReqValue(string newValue)
     {
-        RootController.Instance.GetSettings().GreenFillRequirement = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.GreenFillRequirement = float.Parse(newValue);
     }
 
     public void ChangeRedReqValue(string newValue)
     {
-        RootController.Instance.GetSettings().RedFillRequirement = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.RedFillRequirement = float.Parse(newValue);
     }
 
     public void ChangeYellowReqValue(string newValue)
     {
-        RootController.Instance.GetSettings().YellowFillRequirement = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.YellowFillRequirement = float.Parse(newValue);
     }
 
     // Damage/Heal value
     public void ChangeGreenValue(string newValue)
     {
-        RootController.Instance.GetSettings().GreenValue = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.GreenValue = float.Parse(newValue);
     }
 
     public void ChangeRedValue(string newValue)
     {
-        RootController.Instance.GetSettings().RedValue = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.RedValue = float.Parse(newValue);
     }
 
     public void ChangeYellowValue(string newValue)
     {
-        RootController.Instance.GetSettings().YellowValue = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.YellowValue = float.Parse(newValue);
     }
 
     // Multiplier
     public void ChangeSpecialityMultiplier(string newValue)
     {
-        RootController.Instance.GetSettings().SpecialityMultiplier = float.Parse(newValue);
+        RootController.Instance.GetPlayer(0).settings.SpecialityMultiplier = float.Parse(newValue);
     }
 
+
+
+    //Requirements
+    public void ChangeBlueReqValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.BlueFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeGreenReqValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.GreenFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeRedReqValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.RedFillRequirement = float.Parse(newValue);
+    }
+
+    public void ChangeYellowReqValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.YellowFillRequirement = float.Parse(newValue);
+    }
+
+    // Damage/Heal value
+    public void ChangeGreenValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.GreenValue = float.Parse(newValue);
+    }
+
+    public void ChangeRedValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.RedValue = float.Parse(newValue);
+    }
+
+    public void ChangeYellowValue2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.YellowValue = float.Parse(newValue);
+    }
+
+    // Multiplier
+    public void ChangeSpecialityMultiplier2(string newValue)
+    {
+        RootController.Instance.GetPlayer(1).settings.SpecialityMultiplier = float.Parse(newValue);
+    }
+
+    //Health
+    public void ChangePlayerHealth(string newValue)
+    {
+        RootController.Instance.GetPlayer(0).settings.PlayerHealth = float.Parse(newValue);
+        RootController.Instance.GetPlayer(1).settings.PlayerHealth = float.Parse(newValue);
+    }
 }

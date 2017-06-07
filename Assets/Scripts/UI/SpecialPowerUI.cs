@@ -57,7 +57,7 @@ public class SpecialPowerUI : MonoBehaviour {
 
     public void UpdateText (float power)
     {
-        _text.text = power + "/" + RootController.Instance.GetSettings().GetFillRequirementByType(_type.Type);
+        _text.text = power + "/" + _player.settings.GetFillRequirementByType(_type.Type);
     }
 
     public void SetReady ()

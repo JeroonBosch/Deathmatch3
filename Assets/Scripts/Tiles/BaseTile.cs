@@ -104,7 +104,8 @@ public class BaseTile : MonoBehaviour {
             explosion.transform.position = transform.position;
 
             Transform powerObject = _destroyedBy.GetPowerObjectByType(_type.Type);
-            explosion.GetComponent<TileExplosionUI>().Init(powerObject);
+            Player targetPlayer = RootController.Instance.NextPlayer(player.playerNumber);
+            explosion.GetComponent<TileExplosionUI>().Init(powerObject, targetPlayer);
         }
     }
 }

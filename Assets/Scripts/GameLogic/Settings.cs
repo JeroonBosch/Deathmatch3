@@ -30,6 +30,10 @@ public class Settings : ScriptableObject
     private float _specialityMultiplier;
     public float SpecialityMultiplier { get { return _specialityMultiplier; } set { _specialityMultiplier = value; } }
 
+
+    private float _playerHealth;
+    public float PlayerHealth { get { return _playerHealth; } set { _playerHealth = value; } }
+
     public void DefaultSettings ()
     {
         //Set default values

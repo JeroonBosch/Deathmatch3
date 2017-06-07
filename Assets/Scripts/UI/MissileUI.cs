@@ -14,10 +14,10 @@ public class MissileUI : MonoBehaviour
         if (collision.gameObject.name == _target.playerString)
         {
             if (_type.Type == TileTypes.ESubState.yellow) { 
-                _target.ReceiveDamage((int)RootController.Instance.GetSettings().YellowFillRequirement);
+                _target.ReceiveDamage((int)RootController.Instance.NextPlayer(_target.playerNumber).settings.YellowValue);
                 _target.SpecialExplosion("YellowTileExplosion");
             } else if (_type.Type == TileTypes.ESubState.red) { 
-                _target.ReceiveDamage((int)RootController.Instance.GetSettings().RedFillRequirement);
+                _target.ReceiveDamage((int)RootController.Instance.NextPlayer(_target.playerNumber).settings.RedValue);
                 _target.SpecialExplosion("RedTileExplosion"); 
             }
 

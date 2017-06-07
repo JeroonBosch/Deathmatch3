@@ -6,16 +6,19 @@ public class TileExplosionUI : MonoBehaviour
     private RectTransform _rt;
     private Vector2 _startPosition;
     private Transform _target;
+    private Player _targetPlayer;
 
     private float _travelTime = .66f;
     private float _travellingFor = 0f;
     private float _random;
 
-    //private bool _damageApplied = false;
+    private bool _damageApplied = false;
 
-    public void Init(Transform target)
+    public void Init(Transform target, Player targetPlayer)
     {
-        _target = target;
+        _target = target; //overridden, but kept as backup if we ever have particles to fly to the combo-meter
+        _target = targetPlayer.transform;
+        _targetPlayer = targetPlayer;
         _rt = GetComponent<RectTransform>();
         _startPosition = _rt.position;
         _random = Random.Range(-1f, 1f);
@@ -29,8 +32,8 @@ public class TileExplosionUI : MonoBehaviour
     private void OnDestroy()
     {
         RootController.Instance.EnableControls();
-        //if (!_damageApplied)
-            //ApplyDamage();
+        if (!_damageApplied)
+            ApplyDamage();
     }
 
     // Update is called once per frame
@@ -70,10 +73,10 @@ public class TileExplosionUI : MonoBehaviour
         return p;
     }
 
-    /*private void ApplyDamage()
+    private void ApplyDamage()
     {
         _damageApplied = true;
-        _target.NormalExplosion();
-        _target.ReceiveDamage(1);
-    }*/
+        _targetPlayer.NormalExplosion();
+        _targetPlayer.ReceiveDamage(1);
+    }
 }
