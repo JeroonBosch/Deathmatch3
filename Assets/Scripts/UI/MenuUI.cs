@@ -80,6 +80,7 @@ public class MenuUI : MonoBehaviour
         player.SelectColorByIndex(index);
     }
 
+//Requirements
     public void ChangeBlueReqValue (string newValue)
     {
         RootController.Instance.GetSettings().BlueFillRequirement = float.Parse(newValue);
@@ -100,8 +101,26 @@ public class MenuUI : MonoBehaviour
         RootController.Instance.GetSettings().YellowFillRequirement = float.Parse(newValue);
     }
 
+    // Damage/Heal value
+    public void ChangeGreenValue(string newValue)
+    {
+        RootController.Instance.GetSettings().GreenValue = float.Parse(newValue);
+    }
+
+    public void ChangeRedValue(string newValue)
+    {
+        RootController.Instance.GetSettings().RedValue = float.Parse(newValue);
+    }
+
+    public void ChangeYellowValue(string newValue)
+    {
+        RootController.Instance.GetSettings().YellowValue = float.Parse(newValue);
+    }
+
+    // Multiplier
     public void ChangeSpecialityMultiplier(string newValue)
     {
         RootController.Instance.GetSettings().SpecialityMultiplier = float.Parse(newValue);
     }
+
 }
